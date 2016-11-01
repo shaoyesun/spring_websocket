@@ -62,7 +62,7 @@
 
   <!-- 用来配置session 的超时时间，单位分钟 -->
   <session-config>
-    <session-timeout>1</session-timeout>
+    <session-timeout>30</session-timeout>
   </session-config>
 
   <!-- session listener 多用户登录限制,退出清除session信息的同时清除application中存放用户登录信息-->
