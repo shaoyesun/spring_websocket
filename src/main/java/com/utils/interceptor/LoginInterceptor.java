@@ -19,7 +19,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
-        //用户掉线或被挤掉，保存当前链接以便登录后重定向到要访问的页面
+        //保存当前链接，以便用户掉线或被挤掉登录后重定向到要访问的页面
         if (request.getHeader("x-requested-with") == null) {//非ajax(异步)请求，则保存当前访问链接
             String queryUrl = request.getQueryString() == null ? "" : ("?" + request.getQueryString());//获取参数
             String requestUrl = request.getServletPath() + queryUrl;//httpRequest.getServletPath(),获取链接
