@@ -53,9 +53,4 @@ public class WebsocketController {
         return "websocket";
     }
 
-    @RequestMapping(value = "/websocket1")
-    public String websocket1() {
-        return "websocket1";
-    }
-
 }

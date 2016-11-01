@@ -12,18 +12,15 @@ now user : ${now_user.userName}
     pass:<input type="text" name="password" id="pass"><br><br>
     <input type="button" value="add" onclick="add()"><br><br>
 </form>
-<h5>---------------------------<spring:message code="exit"/>------------------------------</h5>
+<h5>---------------------------login out------------------------------</h5>
 &nbsp;&nbsp;<a href="/user/loginOut">login out</a><br><br>
-<h5>-------------------------<spring:message code="findAll"/>--------------------------------</h5>
+<h5>-------------------------show all user--------------------------------</h5>
 &nbsp;&nbsp;<input type="button" value="findAll" onclick="findAll()"><br>
 <div id="alluser"></div>
 <div id="edituser"></div>
 <h5>----------------------------------websocket--------------------------------</h5>
 <form action="/websocket/websocket">
     <input type="submit" value="websocket">
-</form>
-<form action="/websocket/websocket1">
-    <input type="submit" value="websocket1">
 </form>
 <script src="http://js.biocloud.cn/jquery/1.11.3/jquery.min.js"></script>
 <script>
@@ -81,7 +78,7 @@ now user : ${now_user.userName}
 
     function editShow(id, userName, password){
         $("#edituser").html("");
-        var str = "<br><h5>---------------------------<spring:message code="edit"/>------------------------------</h5>"+
+        var str = "<br><h5>---------------------------edit------------------------------</h5>"+
                   "name:<input type=\"text\" name=\"userName\" id=\"userName\" value="+ userName +"><label id=\"exist\"></label><br><br>"+
                   "pass:<input type=\"text\" name=\"password\" id=\"password\"  value="+ password +"><br><br>"+
                   "<input type=\"button\" value=\"edit\" onclick=\"edit("+id+")\">";
