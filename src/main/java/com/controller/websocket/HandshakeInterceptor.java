@@ -17,7 +17,9 @@ import javax.servlet.http.HttpSession;
 public class HandshakeInterceptor implements org.springframework.web.socket.server.HandshakeInterceptor {
 
     //进入hander之前的拦截
-    public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse serverHttpResponse, WebSocketHandler webSocketHandler, Map<String, Object> map) throws Exception {
+    public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse serverHttpResponse,
+                                   WebSocketHandler webSocketHandler, Map<String, Object> map) throws Exception {
+        String[] uri = request.getURI().toString().split("/");
         if (request instanceof ServletServerHttpRequest) {
             ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
             HttpSession session = servletRequest.getServletRequest().getSession(true);
@@ -25,13 +27,14 @@ public class HandshakeInterceptor implements org.springframework.web.socket.serv
             User user = (User) session.getAttribute("now_user");
             if (session != null) {
                 //使用userName区分WebSocketHandler，以便定向发送消息
-                map.put("WEBSOCKET_USERNAME", user.getUserName());
+                map.put("websocket_index", uri[uri.length - 1] + "_" + user.getUserName());
             }
         }
         return true;
     }
 
-    public void afterHandshake(ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse, WebSocketHandler webSocketHandler, Exception e) {
+    public void afterHandshake(ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse,
+                               WebSocketHandler webSocketHandler, Exception e) {
 
     }
 }

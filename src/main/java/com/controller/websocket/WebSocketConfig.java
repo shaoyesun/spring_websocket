@@ -12,7 +12,12 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @EnableWebSocket//开启websocket
 public class WebSocketConfig implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        //页面1的websocket支持
         registry.addHandler(new WebSocketHander(), "/echo").addInterceptors(new HandshakeInterceptor()); //支持websocket 的访问链接
         registry.addHandler(new WebSocketHander(), "/sockjs/echo").addInterceptors(new HandshakeInterceptor()).withSockJS(); //不支持websocket的访问链接
+
+        //页面2的websocket支持
+        registry.addHandler(new WebSocketHander(), "/echo1").addInterceptors(new HandshakeInterceptor()); //支持websocket 的访问链接
+        registry.addHandler(new WebSocketHander(), "/sockjs/echo1").addInterceptors(new HandshakeInterceptor()).withSockJS(); //不支持websocket的访问链接
     }
 }

@@ -22,6 +22,9 @@ now user : ${now_user.userName}
 <form action="/websocket/websocket">
     <input type="submit" value="websocket">
 </form>
+<form action="/websocket/websocket1">
+    <input type="submit" value="websocket1">
+</form>
 <script src="http://js.biocloud.cn/jquery/1.11.3/jquery.min.js"></script>
 <script>
     function add() {
