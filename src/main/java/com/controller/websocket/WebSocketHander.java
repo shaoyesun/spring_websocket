@@ -18,6 +18,7 @@ import java.util.Map;
 public class WebSocketHander implements WebSocketHandler {
 
     private static Logger log = Logger.getLogger(WebSocketHander.class);
+
     private static int count = 0;//统计建立管道数
     private static final ArrayList<WebSocketSession> users = new ArrayList<WebSocketSession>();
     private static final Map<String, String> map = new HashMap();
