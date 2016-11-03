@@ -20,24 +20,24 @@ public class WebSocketHander implements WebSocketHandler {
     private static Logger log = Logger.getLogger(WebSocketHander.class);
 
     private static int count = 0;//统计建立管道数
-    private static final ArrayList<WebSocketSession> users = new ArrayList<WebSocketSession>();
+    private static final ArrayList<WebSocketSession> sessions = new ArrayList<WebSocketSession>();
     private static final Map<String, String> map = new HashMap();
 
     //初次链接成功执行
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        users.add(session);
         String key = (String) session.getAttributes().get("websocket_index");
         log.debug(key + " 链接成功......");
         if (key != null) {
             //每个用户的同一功能的管道限制仅一个
             if (map.get(key) != null) {
-                for (WebSocketSession sess : users) {
+                for (WebSocketSession sess : sessions) {
                     if (sess.getId().equals(map.get(key))) sess.close();
                     break;
                 }
             }
             //未读消息处理逻辑
             count++;
+            sessions.add(session);
             map.put(key, session.getId());
             session.sendMessage(new TextMessage(count + ""));
         }
@@ -56,14 +56,14 @@ public class WebSocketHander implements WebSocketHandler {
         }
         count--;
         log.debug(webSocketSession.getAttributes().get("websocket_index") + " 链接出错，关闭链接......");
-        users.remove(webSocketSession);
+        sessions.remove(webSocketSession);
     }
 
     //关闭或离开此页面管道关闭
     public void afterConnectionClosed(WebSocketSession webSocketSession, CloseStatus closeStatus) throws Exception {
         count--;
         log.debug(webSocketSession.getAttributes().get("websocket_index") + " 链接关闭......" + closeStatus.toString());
-        users.remove(webSocketSession);
+        sessions.remove(webSocketSession);
     }
 
     public boolean supportsPartialMessages() {
@@ -76,8 +76,8 @@ public class WebSocketHander implements WebSocketHandler {
      * @param message
      */
     public void sendMessageToUsers(TextMessage message) {
-        ArrayList<WebSocketSession> u = users;
-        for (WebSocketSession user : users) {
+        ArrayList<WebSocketSession> u = sessions;
+        for (WebSocketSession user : sessions) {
             try {
                 if (user.isOpen()) {
                     user.sendMessage(message);
@@ -89,9 +89,9 @@ public class WebSocketHander implements WebSocketHandler {
     }
 
     public void sendMessageToUsers1(String index, TextMessage message) {
-        ArrayList<WebSocketSession> u = users;
+        ArrayList<WebSocketSession> u = sessions;
         Map<String, String> m = map;
-        for (WebSocketSession user : users) {
+        for (WebSocketSession user : sessions) {
             try {
                 String[] str = user.getAttributes().get("websocket_index").toString().split("_");
                 if (user.isOpen() && str[0].equals(index)) {
@@ -110,8 +110,8 @@ public class WebSocketHander implements WebSocketHandler {
      * @param message
      */
     public void sendMessageToUser(String userName, TextMessage message) {
-        ArrayList<WebSocketSession> u = users;
-        for (WebSocketSession user : users) {
+        ArrayList<WebSocketSession> u = sessions;
+        for (WebSocketSession user : sessions) {
             if (user.getAttributes().get("websocket_index").equals(userName)) {
                 try {
                     if (user.isOpen()) {
@@ -126,9 +126,9 @@ public class WebSocketHander implements WebSocketHandler {
     }
 
     public void sendMessageToUser1(String index, TextMessage message) {
-        ArrayList<WebSocketSession> u = users;
+        ArrayList<WebSocketSession> u = sessions;
         Map<String, String> m = map;
-        for (WebSocketSession user : users) {
+        for (WebSocketSession user : sessions) {
             if (user.getId().equals(map.get(index))) {
                 try {
                     if (user.isOpen()) {
