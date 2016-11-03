@@ -24,9 +24,9 @@ public class WebSocketHander implements WebSocketHandler {
 
     //初次链接成功执行
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        log.debug("链接成功......");
         users.add(session);
         String key = (String) session.getAttributes().get("websocket_index");
+        log.debug(key + " 链接成功......");
         if (key != null) {
             //未读消息处理逻辑
             count++;
@@ -37,8 +37,9 @@ public class WebSocketHander implements WebSocketHandler {
 
     //接受消息处理消息
     public void handleMessage(WebSocketSession webSocketSession, WebSocketMessage<?> webSocketMessage) throws Exception {
-        sendMessageToUsers(new TextMessage(webSocketMessage.getPayload() + ""));
-        //sendMessageToUser("123", new TextMessage(webSocketMessage.getPayload() + ""));
+        String index = webSocketSession.getAttributes().get("websocket_index").toString();
+        sendMessageToUsers1(index.split("_")[0], new TextMessage(webSocketMessage.getPayload() + ""));
+        //sendMessageToUser(index, new TextMessage(webSocketMessage.getPayload() + ""));
     }
 
     public void handleTransportError(WebSocketSession webSocketSession, Throwable throwable) throws Exception {
@@ -46,14 +47,14 @@ public class WebSocketHander implements WebSocketHandler {
             webSocketSession.close();
         }
         count--;
-        log.debug("链接出错，关闭链接......");
+        log.debug(webSocketSession.getAttributes().get("websocket_index") + " 链接出错，关闭链接......");
         users.remove(webSocketSession);
     }
 
     //关闭或离开此页面管道关闭
     public void afterConnectionClosed(WebSocketSession webSocketSession, CloseStatus closeStatus) throws Exception {
         count--;
-        log.debug("链接关闭......" + closeStatus.toString());
+        log.debug(webSocketSession.getAttributes().get("websocket_index") + " 链接关闭......" + closeStatus.toString());
         users.remove(webSocketSession);
     }
 
