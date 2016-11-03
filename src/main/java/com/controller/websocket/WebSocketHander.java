@@ -28,6 +28,13 @@ public class WebSocketHander implements WebSocketHandler {
         String key = (String) session.getAttributes().get("websocket_index");
         log.debug(key + " 链接成功......");
         if (key != null) {
+            //每个用户的同一功能的管道限制仅一个
+            if (map.get(key) != null) {
+                for (WebSocketSession sess : users) {
+                    if (sess.getId().equals(map.get(key))) sess.close();
+                    break;
+                }
+            }
             //未读消息处理逻辑
             count++;
             map.put(key, session.getId());
