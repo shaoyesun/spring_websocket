@@ -26,7 +26,6 @@ public class WebSocketHander implements WebSocketHandler {
     //初次链接成功执行
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String key = (String) session.getAttributes().get("websocket_index");
-        log.debug(key + " 链接成功......");
         if (key != null) {
             //每个用户的同一功能的管道限制仅一个
             if (map.get(key) != null) {
@@ -39,6 +38,7 @@ public class WebSocketHander implements WebSocketHandler {
             count++;
             sessions.add(session);
             map.put(key, session.getId());
+            log.debug(key + " 链接成功......");
             session.sendMessage(new TextMessage(count + ""));
         }
     }
